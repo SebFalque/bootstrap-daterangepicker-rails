@@ -46,6 +46,7 @@
         this.dateLimit = false;
         this.autoApply = false;
         this.singleDatePicker = false;
+        this.weekDaysPicker = false;
         this.showDropdowns = false;
         this.showWeekNumbers = false;
         this.showISOWeekNumbers = false;
@@ -57,6 +58,8 @@
         this.autoUpdateInput = true;
         this.alwaysShowCalendars = false;
         this.ranges = {};
+        this.weekDays = [];
+        this.selectedWeekDays = [];
 
         this.opens = 'right';
         if (this.element.hasClass('pull-right'))
@@ -122,10 +125,16 @@
                     '</div>' +
                     '<div class="calendar-table"></div>' +
                 '</div>' +
+                '<div class="buttons">' +
+                    '<button class="applyBtn" disabled="disabled" type="button"></button> ' +
+                    '<button class="cancelBtn" type="button"></button>' +
+                '</div>' +
                 '<div class="ranges">' +
                     '<div class="range_inputs">' +
-                        '<button class="applyBtn" disabled="disabled" type="button"></button> ' +
-                        '<button class="cancelBtn" type="button"></button>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="week_days">' +
+                    '<div class="week_days_inputs">' +
                     '</div>' +
                 '</div>' +
             '</div>';
@@ -236,6 +245,13 @@
                 this.endDate = this.startDate.clone();
         }
 
+        if (typeof options.weekDaysPicker === 'boolean') {
+            this.weekDaysPicker = options.weekDaysPicker;
+            if (this.weekDaysPicker)
+                this.weekDays = options.weekDays;
+                this.selectedWeekDays = options.selectedWeekDays;
+        }
+
         if (typeof options.timePicker === 'boolean')
             this.timePicker = options.timePicker;
 
@@ -342,6 +358,16 @@
             this.container.find('.ranges').prepend(list);
         }
 
+        if (typeof options.weekDays === 'object') {
+            //var list = '<div class="form-check form-check-inline">';
+            var list = '<lu class="form-check">';
+            for (day of options.weekDays) {
+                list += '<li><label class="form-check-label" for="weekDayCheckbox_' + day + '"><input type="checkbox" id="weekDayCheckbox_' + day + '" class="form-check-input" value="' + day + '">' + day + '</label></li>';
+            }
+            list += '</ul>';
+            this.container.find('.week_days').append(list);
+        }
+
         if (typeof cb === 'function') {
             this.callback = cb;
         }
@@ -356,10 +382,16 @@
         if (this.timePicker && this.autoApply)
             this.autoApply = false;
 
-        if (this.autoApply && typeof options.ranges !== 'object') {
-            this.container.find('.ranges').hide();
-        } else if (this.autoApply) {
+        if (this.autoApply) {
             this.container.find('.applyBtn, .cancelBtn').addClass('hide');
+        }
+
+        if (typeof options.ranges !== 'object') {
+            this.container.find('.ranges').hide();
+        }
+
+        if (typeof options.weekDays !== 'object') {
+            this.container.find('.week_days').hide();
         }
 
         if (this.singleDatePicker) {
@@ -420,6 +452,9 @@
             .on('mouseenter.daterangepicker', 'li', $.proxy(this.hoverRange, this))
             .on('mouseleave.daterangepicker', 'li', $.proxy(this.updateFormInputs, this));
 
+        this.container.find('.week_days')
+            .on('click.daterangepicker', 'li', $.proxy(this.clickWeekDay, this))
+
         if (this.element.is('input')) {
             this.element.on({
                 'click.daterangepicker': $.proxy(this.show, this),
@@ -435,7 +470,10 @@
         // if attached to a text input, set the initial value
         //
 
-        if (this.element.is('input') && !this.singleDatePicker && this.autoUpdateInput) {
+        if (this.element.is('input') && !this.singleDatePicker && !this.singleDatePicker && this.autoUpdateInput) {
+            this.element.val(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
+            this.element.trigger('change');
+        } else if (this.element.is('input') && !this.singleDatePicker && this.autoUpdateInput) {
             this.element.val(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
             this.element.trigger('change');
         } else if (this.element.is('input') && this.autoUpdateInput) {
@@ -1318,6 +1356,15 @@
 
             this.updateView();
 
+        },
+
+        clickWeekDay: function(e) {
+            var weekDay = e.target.innerHTML;
+            if (this.weekDays.find(weekDay)) {
+                this.weekDays.remove(weekDay);
+            } else {
+                this.weekDays.append(weekDay);
+            }
         },
 
         calculateChosenLabel: function() {
