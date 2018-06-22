@@ -361,7 +361,8 @@
         if (typeof options.weekDays === 'object') {
             //var list = '<div class="form-check form-check-inline">';
             var list = '<lu class="form-check">';
-            for (day of options.weekDays) {
+            for (var i = 0 ; i < options.weekDays.length ; i++) {
+                var day = options.weekDays[i];
                 list += '<li><label class="form-check-label" for="weekDayCheckbox_' + day + '"><input type="checkbox" id="weekDayCheckbox_' + day + '" class="form-check-input" value="' + day + '">' + day + '</label></li>';
             }
             list += '</ul>';
