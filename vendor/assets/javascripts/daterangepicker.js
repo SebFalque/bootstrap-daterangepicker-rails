@@ -125,10 +125,6 @@
                     '</div>' +
                     '<div class="calendar-table"></div>' +
                 '</div>' +
-                '<div class="buttons">' +
-                    '<button class="applyBtn" disabled="disabled" type="button"></button> ' +
-                    '<button class="cancelBtn" type="button"></button>' +
-                '</div>' +
                 '<div class="ranges">' +
                     '<div class="range_inputs">' +
                     '</div>' +
@@ -136,6 +132,10 @@
                 '<div class="week_days">' +
                     '<div class="week_days_inputs">' +
                     '</div>' +
+                '</div>' +
+                '<div class="buttons">' +
+                    '<button class="applyBtn" disabled="disabled" type="button"></button> ' +
+                    '<button class="cancelBtn" type="button"></button>' +
                 '</div>' +
             '</div>';
 
@@ -359,11 +359,12 @@
         }
 
         if (typeof options.weekDays === 'object') {
-            //var list = '<div class="form-check form-check-inline">';
-            var list = '<lu class="form-check">';
+            var list = '<div class="form-check form-check-inline">';
+            //var list = '<lu class="form-check form-check-inline">';
             for (var i = 0 ; i < options.weekDays.length ; i++) {
                 var day = options.weekDays[i];
-                list += '<li><label class="form-check-label" for="weekDayCheckbox_' + day + '"><input type="checkbox" id="weekDayCheckbox_' + day + '" class="form-check-input" value="' + day + '">' + day + '</label></li>';
+                var checked = day.inArray(options.selectedWeekDays) > -1;
+                list += '<li><label class="form-check-label" for="weekDayCheckbox_' + day + '"><input type="checkbox" id="weekDayCheckbox_' + day + '" class="form-check-input" checked="' + checked + '">' + day + '</label></li>';
             }
             list += '</ul>';
             this.container.find('.week_days').append(list);
@@ -384,7 +385,7 @@
             this.autoApply = false;
 
         if (this.autoApply) {
-            this.container.find('.applyBtn, .cancelBtn').addClass('hide');
+            this.container.find('.applyBtn, .cancelBtn').hide();
         }
 
         if (typeof options.ranges !== 'object') {
