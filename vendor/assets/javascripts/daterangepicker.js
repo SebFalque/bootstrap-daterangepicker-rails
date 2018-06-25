@@ -385,7 +385,7 @@
             this.autoApply = false;
 
         if (this.autoApply) {
-            this.container.find('.applyBtn, .cancelBtn').hide();
+            this.container.find('.buttons').hide();
         }
 
         if (typeof options.ranges !== 'object') {
