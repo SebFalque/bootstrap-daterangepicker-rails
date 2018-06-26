@@ -18,8 +18,13 @@
 
 </head>
     <body>
-
+        <form>
         <input type="text" name="datefilter" value="" style="width: 300px;"/>
+        <input type="submit"/>
+      </form>
+
+
+
 
         <script type="text/javascript">
         $(function() {
@@ -30,7 +35,7 @@
                                           maxSpan: {'years': 1 },
                                           startDate: moment().startOf('hour'),
                                           endDate: moment().startOf('hour').add(32, 'hour'),
-                                          autoApply: false,
+                                          autoApply: true,
                                           applyButtonClasses: "btn-rounded btn-plain",
                                           cancelButtonClasses: "btn-rounded btn-default",
                                           locale: {
@@ -44,8 +49,8 @@
                                             firstDay: 1
                                           },
                                           weekDaysPicker: true,
-                                          weekDays: ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"],
-                                          selectedWeekDays: ["Mardi", "Jeudi"]
+                                          weekDays: ["Lu", "Ma", "Me", "Je", "Ve", "Sa", "Di"],
+                                          selectedWeekDays: ["Ma", "Je"]
                                         };
 
           $('input[name="datefilter"]').daterangepicker(dateRangePickerOptions);

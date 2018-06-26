@@ -1361,7 +1361,7 @@
         },
 
         clickWeekDay: function(e) {
-            var weekDay = e.target.innerHTML;
+            var weekDay = e.target.innerText;
             if (this.weekDays.find(weekDay)) {
                 this.weekDays.remove(weekDay);
             } else {
