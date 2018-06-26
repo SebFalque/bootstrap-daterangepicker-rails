@@ -462,6 +462,47 @@ $daterangepicker-ranges-active-border-radius: $daterangepicker-border-radius !de
   }
 }
 
+//
+// Week Days Picker
+//
+
+.week-days {
+  font-size: 11px;
+  float: none;
+  margin: 4px;
+  text-align: left;
+
+  ul {
+    list-style: none;
+    margin: 0 auto;
+    padding: 0;
+    width: 100%;
+  }
+
+  li {
+    font-size: 13px;
+    background: $daterangepicker-ranges-bg-color;
+    border: $daterangepicker-ranges-border-size solid $daterangepicker-ranges-border-color;
+    border-radius: $daterangepicker-ranges-border-radius;
+    color: $daterangepicker-ranges-color;
+    padding: 3px 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+
+    &:hover {
+      background: $daterangepicker-ranges-hover-bg-color;
+      border: $daterangepicker-ranges-hover-border-size solid $daterangepicker-ranges-hover-border-color;
+      color: $daterangepicker-ranges-hover-color;
+    }
+
+    &.active {
+      background: $daterangepicker-ranges-hover-bg-color;
+      border: $daterangepicker-ranges-hover-border-size solid $daterangepicker-ranges-hover-border-color;
+      color: $daterangepicker-ranges-hover-color;
+    }
+  }
+}
+
 /*  Larger Screen Styling */
 @media (min-width: 564px) {
   .#{$prefix-class} {

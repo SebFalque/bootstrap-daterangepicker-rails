@@ -129,8 +129,8 @@
                     '<div class="range_inputs">' +
                     '</div>' +
                 '</div>' +
-                '<div class="week_days">' +
-                    '<div class="week_days_inputs">' +
+                '<div class="week-days">' +
+                    '<div class="week-days_inputs">' +
                     '</div>' +
                 '</div>' +
                 '<div class="buttons">' +
@@ -294,7 +294,7 @@
         if (typeof options.startDate === 'undefined' && typeof options.endDate === 'undefined') {
             if ($(this.element).is('input[type=text]')) {
                 var val = $(this.element).val(),
-                    split = val.split(this.locale.separator);
+                    split = this.weekDaysPicker ? val.split(' | ')[0].split(this.locale.separator) : val.split(this.locale.separator);
 
                 start = end = null;
 
@@ -362,12 +362,12 @@
             var list = '<div class="form-check form-check-inline">';
             //var list = '<lu class="form-check form-check-inline">';
             for (var i = 0 ; i < options.weekDays.length ; i++) {
-                var day = options.weekDays[i];
-                var checked = jQuery.inArray(day, options.selectedWeekDays) > -1;
-                list += '<li><label class="form-check-label" for="weekDayCheckbox_' + day + '"><input type="checkbox" id="weekDayCheckbox_' + day + '" class="form-check-input"' + (checked ? " checked" : "") + '">' + day + '</label></li>';
+                var weekDay = options.weekDays[i];
+                var checked = jQuery.inArray(weekDay, options.selectedWeekDays) > -1;
+                list += '<li><label class="form-check-label" for="weekDayCheckbox_' + weekDay + '"><input type="checkbox" id="weekDayCheckbox_' + weekDay + '" class="form-check-input week-day-check"' + (checked ? " checked" : "") + '>' + weekDay + '</label></li>';
             }
             list += '</ul>';
-            this.container.find('.week_days').append(list);
+            this.container.find('.week-days').append(list);
         }
 
         if (typeof cb === 'function') {
@@ -381,7 +381,7 @@
         }
 
         //can't be used together for now
-        if (this.timePicker && this.autoApply)
+        if (this.timePicker || this.weekDaysPicker)
             this.autoApply = false;
 
         if (this.autoApply) {
@@ -393,7 +393,11 @@
         }
 
         if (typeof options.weekDays !== 'object') {
-            this.container.find('.week_days').hide();
+            this.container.find('.week-days').hide();
+        }
+
+        if ((typeof options.ranges !== 'object') && (typeof options.weekDays !== 'object')) {
+            this.container.find('.buttons').hide();
         }
 
         if (this.singleDatePicker) {
@@ -448,14 +452,16 @@
             .on('change.daterangepicker', '.daterangepicker_input input', $.proxy(this.formInputsChanged, this));
 
         this.container.find('.ranges')
-            .on('click.daterangepicker', 'button.applyBtn', $.proxy(this.clickApply, this))
-            .on('click.daterangepicker', 'button.cancelBtn', $.proxy(this.clickCancel, this))
             .on('click.daterangepicker', 'li', $.proxy(this.clickRange, this))
             .on('mouseenter.daterangepicker', 'li', $.proxy(this.hoverRange, this))
             .on('mouseleave.daterangepicker', 'li', $.proxy(this.updateFormInputs, this));
 
-        this.container.find('.week_days')
-            .on('click.daterangepicker', 'li', $.proxy(this.clickWeekDay, this))
+        this.container.find('.week-days')
+            .on('change.daterangepicker', 'input.week-day-check', $.proxy(this.clickWeekDay, this))
+
+        this.container.find('.buttons')
+            .on('click.daterangepicker', 'button.applyBtn', $.proxy(this.clickApply, this))
+            .on('click.daterangepicker', 'button.cancelBtn', $.proxy(this.clickCancel, this))
 
         if (this.element.is('input')) {
             this.element.on({
@@ -472,14 +478,16 @@
         // if attached to a text input, set the initial value
         //
 
-        if (this.element.is('input') && !this.singleDatePicker && !this.singleDatePicker && this.autoUpdateInput) {
-            this.element.val(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
-            this.element.trigger('change');
-        } else if (this.element.is('input') && !this.singleDatePicker && this.autoUpdateInput) {
-            this.element.val(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
-            this.element.trigger('change');
-        } else if (this.element.is('input') && this.autoUpdateInput) {
-            this.element.val(this.startDate.format(this.locale.format));
+        if (this.element.is('input') && this.autoUpdateInput) {
+            if (this.singleDatePicker) {
+                this.element.val(this.startDate.format(this.locale.format));
+            } else {
+                this.element.val(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
+            }
+            if (this.weekDaysPicker && this.selectedWeekDays.length > 0) {
+                this.element.val(this.element.val() + ' | ' + this.selectedWeekDays.join());
+            }
+
             this.element.trigger('change');
         }
 
@@ -1361,11 +1369,16 @@
         },
 
         clickWeekDay: function(e) {
-            var weekDay = e.target.innerText;
-            if (this.weekDays.find(weekDay)) {
-                this.weekDays.remove(weekDay);
-            } else {
-                this.weekDays.append(weekDay);
+            //var weekDay = $('label[for="' + e.target.id + ']').innerText;
+            var weekDay = e.target.labels[0].innerText;
+            var checked = e.target.checked;
+            var arrayPosition = jQuery.inArray(weekDay, this.selectedWeekDays);
+            if (checked) {
+                if (arrayPosition < 0) {
+                    this.selectedWeekDays.push(weekDay);
+                }
+            } else if (arrayPosition > -1) {
+                this.selectedWeekDays.splice(arrayPosition, 1);
             }
         },
 
@@ -1559,11 +1572,17 @@
         },
 
         updateElement: function() {
-            if (this.element.is('input') && !this.singleDatePicker && this.autoUpdateInput) {
-                this.element.val(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
-                this.element.trigger('change');
-            } else if (this.element.is('input') && this.autoUpdateInput) {
-                this.element.val(this.startDate.format(this.locale.format));
+            if (this.element.is('input') && this.autoUpdateInput) {
+                if (this.singleDatePicker) {
+                    this.element.val(this.startDate.format(this.locale.format));
+                } else {
+                    this.element.val(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
+                }
+
+                if (this.weekDaysPicker && this.selectedWeekDays.length > 0) {
+                    this.element.val(this.element.val() + ' | ' + this.selectedWeekDays.join());
+                }
+
                 this.element.trigger('change');
             }
         },
