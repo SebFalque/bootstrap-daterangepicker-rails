@@ -484,10 +484,10 @@ $daterangepicker-ranges-active-border-radius: $daterangepicker-border-radius !de
     font-size: 16px;
     font-weight: 700;
     min-width: 32px;
-    background: $daterangepicker-ranges-bg-color;
-    border: $daterangepicker-ranges-border-size solid $daterangepicker-ranges-border-color;
-    border-radius: $daterangepicker-ranges-border-radius;
-    color: $daterangepicker-ranges-color;
+    background: $daterangepicker-cell-bg-color;
+    border: $daterangepicker-cell-border-size solid $daterangepicker-cell-border-color;
+    border-radius: $daterangepicker-cell-border-radius;
+    color: $daterangepicker-cell-color;
     padding: 3px 6px;
     margin-bottom: 8px;
     cursor: pointer;
@@ -499,18 +499,17 @@ $daterangepicker-ranges-active-border-radius: $daterangepicker-border-radius !de
     input[type="checkbox"] + label {
       background: $daterangepicker-cell-bg-color;
       border: $daterangepicker-cell-border-size solid $daterangepicker-cell-border-color;
+      border-radius: $daterangepicker-cell-border-radius;
       color: $daterangepicker-cell-color;
     }
 
     input[type="checkbox"] + label:hover {
       background: $daterangepicker-cell-hover-bg-color;
-      border: $daterangepicker-cell-hover-border-size solid $daterangepicker-cell-hover-border-color;
-      color: $daterangepicker-cell-hover-color;
     }
 
     input[type="checkbox"]:checked + label {
       background: $daterangepicker-active-bg-color;
-      border: $daterangepicker-active-border-size solid $daterangepicker-active-border-color;
+      border: $daterangepicker-cell-border-size solid $daterangepicker-active-border-color;
       color: $daterangepicker-active-color;
     }
   }
