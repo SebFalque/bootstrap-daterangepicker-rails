@@ -364,7 +364,7 @@
             for (var i = 0 ; i < options.weekDays.length ; i++) {
                 var weekDay = options.weekDays[i];
                 var checked = jQuery.inArray(weekDay, options.selectedWeekDays) > -1;
-                list += '<li><label class="form-check-label" for="weekDayCheckbox_' + weekDay + '"><input type="checkbox" id="weekDayCheckbox_' + weekDay + '" class="form-check-input week-day-check"' + (checked ? " checked" : "") + '>' + weekDay + '</label></li>';
+                list += '<li><input type="checkbox" id="weekDayCheckbox_' + weekDay + '" class="form-check-input week-day-check"' + (checked ? " checked" : "") + '><label class="form-check-label" for="weekDayCheckbox_' + weekDay + '">' + weekDay + '</label></li>';
             }
             list += '</ul>';
             this.container.find('.week-days').append(list);
