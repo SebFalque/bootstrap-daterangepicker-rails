@@ -493,7 +493,7 @@ $daterangepicker-ranges-active-border-radius: $daterangepicker-border-radius !de
     cursor: pointer;
 
     input[type="checkbox"] {
-      visibility: hidden;
+      display: none;
     }
 
     input[type="checkbox"] + label {
