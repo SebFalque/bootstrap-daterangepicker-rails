@@ -359,12 +359,11 @@
         }
 
         if (typeof options.weekDays === 'object') {
-            var list = '<div class="form-check form-check-inline">';
-            //var list = '<lu class="form-check form-check-inline">';
+            var list = '<ul class="form-check form-check-inline">';
             for (var i = 0 ; i < options.weekDays.length ; i++) {
                 var weekDay = options.weekDays[i];
                 var checked = jQuery.inArray(weekDay, options.selectedWeekDays) > -1;
-                list += '<li><input type="checkbox" id="weekDayCheckbox_' + weekDay + '" class="form-check-input week-day-check"' + (checked ? " checked" : "") + '><label class="form-check-label" for="weekDayCheckbox_' + weekDay + '">' + weekDay + '</label></li>';
+                list += '<li class="day-picker"><input type="checkbox" id="weekDayCheckbox_' + weekDay + '" class="form-check-input week-day-check"' + (checked ? " checked" : "") + '><label class="form-check-label" for="weekDayCheckbox_' + weekDay + '">' + weekDay + '</label></li>';
             }
             list += '</ul>';
             this.container.find('.week-days').append(list);

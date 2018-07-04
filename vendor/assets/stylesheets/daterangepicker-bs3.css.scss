@@ -483,15 +483,17 @@ $daterangepicker-ranges-active-border-radius: $daterangepicker-border-radius !de
   li {
     font-size: 16px;
     font-weight: 700;
-    min-width: 32px;
     background: $daterangepicker-cell-bg-color;
     border: $daterangepicker-cell-border-size solid $daterangepicker-cell-border-color;
     border-radius: $daterangepicker-cell-border-radius;
     color: $daterangepicker-cell-color;
-    padding: 3px 6px;
     margin-bottom: 8px;
     cursor: pointer;
 
+    label {
+      min-width: 32px;
+      text-align: center;
+    }
     input[type="checkbox"] {
       display: none;
     }
