@@ -46,6 +46,7 @@
         this.dateLimit = false;
         this.autoApply = false;
         this.singleDatePicker = false;
+        this.singleCalendar = false;
         this.weekDaysPicker = false;
         this.showDropdowns = false;
         this.showWeekNumbers = false;
@@ -245,6 +246,10 @@
                 this.endDate = this.startDate.clone();
         }
 
+        if (typeof options.singleCalendar === 'boolean') {
+            this.singleCalendar = options.singleCalendar;
+        }
+
         if (typeof options.weekDaysPicker === 'boolean') {
             this.weekDaysPicker = options.weekDaysPicker;
             if (this.weekDaysPicker)
@@ -399,7 +404,7 @@
             this.container.find('.buttons').hide();
         }
 
-        if (this.singleDatePicker) {
+        if (this.singleDatePicker || this.singleCalendar) {
             this.container.addClass('single');
             this.container.find('.calendar.left').addClass('single');
             this.container.find('.calendar.left').show();
@@ -726,7 +731,7 @@
             if (this.showWeekNumbers || this.showISOWeekNumbers)
                 html += '<th></th>';
 
-            if ((!minDate || minDate.isBefore(calendar.firstDay)) && (!this.linkedCalendars || side == 'left')) {
+            if ((!minDate || minDate.isBefore(calendar.firstDay)) && (!this.linkedCalendars || side == 'left' || this.singleCalendar)) {
                 html += '<th class="prev available"><i class="fa fa-chevron-left glyphicon glyphicon-chevron-left"></i></th>';
             } else {
                 html += '<th></th>';
@@ -768,7 +773,7 @@
             }
 
             html += '<th colspan="5" class="month">' + dateHtml + '</th>';
-            if ((!maxDate || maxDate.isAfter(calendar.lastDay)) && (!this.linkedCalendars || side == 'right' || this.singleDatePicker)) {
+            if ((!maxDate || maxDate.isAfter(calendar.lastDay)) && (!this.linkedCalendars || side == 'right' || this.singleDatePicker || this.singleCalendar)) {
                 html += '<th class="next available"><i class="fa fa-chevron-right glyphicon glyphicon-chevron-right"></i></th>';
             } else {
                 html += '<th></th>';
