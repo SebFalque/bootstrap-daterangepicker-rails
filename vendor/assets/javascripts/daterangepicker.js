@@ -222,6 +222,9 @@
         if (typeof options.opens === 'string')
             this.opens = options.opens;
 
+        if (typeof options.fluid === 'boolean')
+            this.fluid = options.fluid;
+
         if (typeof options.drops === 'string')
             this.drops = options.drops;
 
@@ -1079,17 +1082,32 @@
                     });
                 }
             } else if (this.opens == 'center') {
-                this.container.css({
-                    top: containerTop,
-                    left: this.element.offset().left - parentOffset.left + this.element.outerWidth() / 2
-                            - this.container.outerWidth() / 2,
-                    right: 'auto'
-                });
-                if (this.container.offset().left < 0) {
+                if (this.fluid && parentRightEdge < 768){
                     this.container.css({
-                        right: 'auto',
-                        left: 9
+                        top: containerTop,
+                        left: this.element.offset().left - parentOffset.left + this.element.outerWidth() / 2
+                                - this.container.outerWidth() / 2,
+                        right: 'auto'
                     });
+                    if (this.container.offset().left < 0) {
+                        this.container.css({
+                            right: 'auto',
+                            left: 9
+                        });
+                    }
+                } else {
+                    this.container.css({
+                        top: containerTop,
+                        left: this.element.offset().left - parentOffset.left + this.element.outerWidth() / 2
+                                - this.container.outerWidth() / 2,
+                        right: 'auto'
+                    });
+                    if (this.container.offset().left < 0) {
+                        this.container.css({
+                            right: 'auto',
+                            left: 9
+                        });
+                    }
                 }
             } else {
                 this.container.css({
